@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load hitcount_tags %}
+
+{% block content %}
+  <h2>{{post.title}}</h2>
+  <ul>
+        <p class="lead">{{post.description}}</p>
+        <p>Published: {{post.published}}</p>
+        <p><i class="fa fa-eye"></i> {% get_hit_count for post %}</p>
+      <div class="d-flex flex-row">
+                    <form method="POST" action="{% url 'like' post.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <button style="background-color: transparent; border: none; box-shadow: none;" type="submit"><i class="glyphicon glyphicon-thumbs-up"></i> <span>{{ post.likes.all.count }}</span></button>
+                    </form>
+
+                    <form method="POST" action="{% url 'dislike' post.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <button style="background-color: transparent; border: none; box-shadow: none;" type="submit"><i class="fa fa-thumbs-down"></i> <span>{{ post.dislikes.all.count }}</span></button>
+                    </form>
+                </div>
+  </ul>
+
+<div class="w3-col m8 s12">
+    <a href="{% url 'posts' %}"><p><button class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></button></p></a>
+</div>
+
+{% endblock %}
